@@ -2,7 +2,12 @@ const mongoose = require("mongoose");
 
 const schema = mongoose.Schema(
     {
-        name: {
+        firstName: {
+            type: String,
+            required: true,
+            minLength: 3,
+        },
+        lastName: {
             type: String,
             required: true,
             minLength: 3,
@@ -17,10 +22,7 @@ const schema = mongoose.Schema(
             required: true,
             minLength: 5,
         },
-        age: {
-            type: Number,
-            default: "",
-        },
+
         pic: {
             type: String,
             default: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",

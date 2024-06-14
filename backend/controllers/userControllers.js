@@ -25,7 +25,7 @@ const login = async (req, res) => {
         const token = jwt.sign({ userId: emailPresent._id }, process.env.JWT_SECRET, {
             expiresIn: "2 hours",
         });
-        return res.status(201).send({ msg: "User logged in successfully", token });
+        return res.status(201).send({ ok: true, message: "User logged in successfully", token });
     } catch (error) {
         res.status(500).send({ ok: false, message: "Unable to login user due to technical error" });
     }

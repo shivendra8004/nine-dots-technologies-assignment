@@ -1,70 +1,80 @@
+"use client";
 import Link from "next/link";
+import { useState } from "react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
-export default function Home() {
+export default function Page() {
+    const router = useRouter();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const handleFormSubmit = async (e) => {
+        const formData = {
+            email,
+            password,
+        };
+        e.preventDefault();
+        try {
+            const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "/user/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+            const data = await response.json();
+            if (data.message) {
+                toast({
+                    description: data.message,
+                });
+            }
+            if (data.ok) {
+                localStorage.setItem("token", data.token);
+                router.push("/dashboard");
+            }
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: "Unable to login",
+            });
+            console.error(error);
+        }
+    };
     return (
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
-            </div>
-
-            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <form className="space-y-6" action="#" method="POST">
-                    <div>
-                        <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                            Email address
-                        </label>
-                        <div className="mt-2">
-                            <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                autoComplete="email"
-                                required
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
+        <div className="min-h-screen flex justify-center items-center">
+            <Card className="w-full max-w-sm">
+                <form onSubmit={handleFormSubmit}>
+                    <CardHeader>
+                        <CardTitle className="text-2xl">Login</CardTitle>
+                        <CardDescription>Enter your email below to login to your account.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="grid gap-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="email">Email</Label>
+                            <Input id="email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} />
                         </div>
-                    </div>
-
-                    <div>
-                        <div className="flex items-center justify-between">
-                            <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                                Password
-                            </label>
-                            <div className="text-sm">
-                                <a href="#" className="font-semibold text-primary hover:text-primary/75">
-                                    Forgot password?
-                                </a>
-                            </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="password">Password</Label>
+                            <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
                         </div>
-                        <div className="mt-2">
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                autoComplete="current-password"
-                                required
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
+                        <div className="text-center text-sm">
+                            Dont have an account?{" "}
+                            <Link href="/auth/signup" className="underline">
+                                Sign up
+                            </Link>
                         </div>
-                    </div>
-
-                    <div>
-                        <button
-                            type="submit"
-                            className="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary/75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-                        >
+                    </CardContent>
+                    <CardFooter>
+                        <Button className="w-full" type="submit">
                             Sign in
-                        </button>
-                    </div>
+                        </Button>
+                    </CardFooter>
                 </form>
-
-                <p className="mt-10 text-center text-sm text-gray-500">
-                    Not a member?{" "}
-                    <Link href="/auth/signup" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-                        Sign up
-                    </Link>
-                </p>
-            </div>
+            </Card>
         </div>
     );
 }
