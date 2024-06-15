@@ -5,13 +5,7 @@ import { Search } from "lucide-react";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
@@ -23,6 +17,7 @@ import AddCook from "@/components/helpers/AddCook";
 import { toast } from "@/components/ui/use-toast";
 import Logout from "@/components/helpers/Logout";
 import EditCook from "@/components/helpers/EditCook";
+import { ThemeSwitcher } from "@/components/helpers/ThemeSwitch";
 
 const Page = () => {
     const router = useRouter();
@@ -116,7 +111,10 @@ const Page = () => {
                             </BreadcrumbItem>
                         </BreadcrumbList>
                     </Breadcrumb>
-                    <div className="relative ml-auto flex-1 md:grow-0">
+                    <div className=" ml-auto">
+                        <ThemeSwitcher />
+                    </div>
+                    <div className="relative flex-1 md:grow-0">
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                         <Input
                             type="search"
