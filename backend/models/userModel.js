@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const { z } = require("zod");
 
-// Zod schema for validation
 const userSchema = z.object({
     firstName: z.string().min(3),
     lastName: z.string().min(3),
@@ -10,7 +9,6 @@ const userSchema = z.object({
     pic: z.string().url().optional().default("https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"),
 });
 
-// Mongoose schema
 const mongooseSchema = new mongoose.Schema(
     {
         firstName: {
@@ -43,7 +41,6 @@ const mongooseSchema = new mongoose.Schema(
     }
 );
 
-// Middleware to validate data with Zod before saving
 mongooseSchema.pre("save", function (next) {
     try {
         userSchema.parse(this.toObject());

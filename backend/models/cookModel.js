@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 const { z } = require("zod");
-
-// Zod schema for validation
 const cookSchema = z.object({
     name: z.string().min(3),
     mobile: z.number().int().gte(1000000000).lte(9999999999),
@@ -12,7 +10,6 @@ const cookSchema = z.object({
     updatedAt: z.date().optional(),
 });
 
-// Mongoose schema
 const mongooseSchema = new mongoose.Schema(
     {
         name: {
@@ -54,7 +51,6 @@ const mongooseSchema = new mongoose.Schema(
     }
 );
 
-// Middleware to validate data with Zod before saving
 mongooseSchema.pre("save", function (next) {
     try {
         cookSchema.parse(this.toObject());

@@ -33,14 +33,12 @@ const EditCook = ({ id, fetchCooks }) => {
                 },
             });
             const data = await response.json();
-            console.log("Fetched data:", data); // Debug log
             if (response.ok) {
                 setName(data.data.name || "");
                 setMobile(data.data.mobile || "");
                 setSelectedOptions(data.data.cuisines || []);
                 setCity(data.data.city || "");
                 setDescription(data.data.description || "");
-                console.log("State after setting:", { name, mobile, selectedOptions, city, description }); // Debug log
             } else {
                 throw new Error(data.message || "Failed to fetch cook data");
             }

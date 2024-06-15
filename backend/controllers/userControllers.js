@@ -71,9 +71,25 @@ const register = async (req, res) => {
         res.status(500).send({ ok: false, message: "Unable to register user" });
     }
 };
+const verifyToken = async (req, res) => {
+    try {
+        const token = req.header("Authorization").replace("Bearer ", "");
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findOne({ _id: decoded.userId });
 
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        res.status(200).send({ ok: true, message: "Token verified", userId: user._id });
+    } catch (error) {
+        console.error("Error verifying token:", error);
+        res.status(401).send({ ok: false, message: "Please authenticate" });
+    }
+};
 module.exports = {
     getuser,
     login,
     register,
+    verifyToken,
 };
